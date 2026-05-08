@@ -64,7 +64,7 @@ When you deposit, two things happen simultaneously. Your deposit amount is encry
 
 This means your deposit amount is visible on Etherscan today because MockCUSDT is a standard ERC20 token. But once your funds are inside the vault, everything that happens to them — yield accrual, compounding, borrowing, repayment — is fully encrypted. Nobody can track your financial activity inside the protocol.
 
-In production with Zama fhERC20, even the deposit amount disappears from Etherscan. The entire flow becomes private end to end.
+In production with Zama fhERC20, even the deposit amount disappears from Etherscan.
 
 ---
 
@@ -124,7 +124,7 @@ Velucrum uses a privacy proxy pattern. The yield source only ever sees the vault
 
 ## Known Limitations
 
-**Deposit amounts visible on Etherscan.** MockCUSDT is a standard ERC20 token. Transfer amounts appear publicly. This is a testnet constraint only.
+**Deposit amounts visible on Etherscan.** MockCUSDT is a standard ERC20 token. Transfer amounts appear publicly. See the section below for the full explanation.
 
 **Yield dilution on new deposits.** The current yield model is proportional. When a new user deposits, pending yield is shared across a larger pool. Production uses index-based yield checkpointing similar to Compound Finance.
 
@@ -134,9 +134,19 @@ Velucrum uses a privacy proxy pattern. The yield source only ever sees the vault
 
 ## Production Plan
 
-In production, Velucrum migrates to Zama's fhERC20 confidential token standard, which is now live on Ethereum mainnet as of December 2025. Users wrap their USDT into fhERC20 cUSDT through Zama's confidential token wrapper — the same pattern used by Zama's own protocol. Every transfer becomes fully encrypted. Nothing appears on Etherscan.
+In production, Velucrum migrates to Zama's fhERC20 confidential token standard, which is now live on Ethereum mainnet as of December 2025. Users wrap their USDT into fhERC20 cUSDT through Zama's confidential token wrapper. Every transfer becomes fully encrypted. Nothing appears on Etherscan.
 
-The yield source would also be upgraded to a Zama-compatible confidential lending protocol. Once Zama launches confidential DeFi primitives on mainnet, Velucrum can plug directly into them via the IYieldSource interface — no vault code changes required. Interest accrual and liquidity operations would be encrypted end to end.
+The yield source would also be upgraded to a Zama-compatible confidential lending protocol. Once Zama launches confidential DeFi primitives on mainnet, Velucrum can plug directly into them via the IYieldSource interface — no vault code changes required.
+
+## Why We Used MockCUSDT
+
+Velucrum was designed to use Zama's official confidential USDT (cUSDTMock) on Sepolia so that deposit and withdrawal amounts would be fully invisible on Etherscan. During development we successfully minted underlying USDT from Zama's faucet, wrapped it to confidential cUSDT, and built a vault that implements the ERC7984 receiver interface.
+
+The integration was blocked by a fundamental requirement of the ERC7984 standard — confidentialTransferAndCall does not accept a fresh encrypted input proof. It requires an existing ACL-approved encrypted balance handle that was previously minted through the wrap process and registered in the FHE coprocessor. Creating this handle from a frontend wallet requires deeper Zama SDK integration that is not yet publicly documented.
+
+This is why Velucrum uses MockCUSDT for testnet. The vault's FHE operations, encrypted balances, blind lending, and confidential yield all work correctly. Only the deposit and withdrawal amounts are visible on Etherscan.
+
+In production, once the full confidential transfer flow is supported in the SDK, every deposit and withdrawal will be completely invisible on Etherscan — end to end privacy from the moment tokens enter the protocol.
 
 The core FHE logic of Velucrum — all 10 operations — requires no changes for this migration. Only the token interface layer is updated.
 
