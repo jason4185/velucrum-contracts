@@ -171,3 +171,11 @@ Key security properties:
 ## Deployer
 
 0x69885Aeb09f8cB62FFF8b2224C66791bFCaed317
+
+## Blind Liquidation
+
+Velucrum implements private liquidation using FHE. Anyone can call the liquidate function for any borrower address. The contract uses FHE.lt to check if the borrower balance has fallen below their loan amount — entirely in encrypted space. The liquidator never sees the borrower balance or loan amount. They only trigger the check and the contract handles the rest privately.
+
+This is different from regular DeFi protocols where health factors are public and liquidators can see exactly who to target and front-run positions. In Velucrum, the liquidation condition is verified privately.
+
+In production, seized collateral would be distributed to the liquidator as a reward to incentivize active monitoring of the protocol.
