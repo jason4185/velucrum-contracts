@@ -78,7 +78,7 @@ const config: HardhatUserConfig = {
         enabled: true,
         runs: 800,
       },
-      evmVersion: "cancun",
+      evmVersion: "cancun", viaIR: true,
     },
   },
   typechain: {

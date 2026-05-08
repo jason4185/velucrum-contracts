@@ -5,13 +5,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  const deployedFHECounter = await deploy("FHECounter", {
+  const deployment = await deploy("ConfidentialYieldDistributor", {
     from: deployer,
     log: true,
+    waitConfirmations: 1,
   });
 
-  console.log(`FHECounter contract: `, deployedFHECounter.address);
+  console.log("ConfidentialYieldDistributor deployed to:", deployment.address);
 };
+
 export default func;
-func.id = "deploy_fheCounter"; // id required to prevent reexecution
-func.tags = ["FHECounter"];
+func.id = "deploy_confidential_yield_distributor";
+func.tags = ["ConfidentialYieldDistributor"];
