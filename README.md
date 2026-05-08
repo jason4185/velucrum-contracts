@@ -136,7 +136,7 @@ Velucrum uses a privacy proxy pattern. The yield source only ever sees the vault
 
 In production, Velucrum migrates to Zama's fhERC20 confidential token standard, which is now live on Ethereum mainnet as of December 2025. Users wrap their USDT into fhERC20 cUSDT through Zama's confidential token wrapper — the same pattern used by Zama's own protocol. Every transfer becomes fully encrypted. Nothing appears on Etherscan.
 
-The yield source would also be upgraded to a Zama-compatible confidential lending protocol such as a confidential Aave adapter. Interest accrual and liquidity operations would be encrypted end to end.
+The yield source would also be upgraded to a Zama-compatible confidential lending protocol such as a Zama-compatible confidential lending protocol. Interest accrual and liquidity operations would be encrypted end to end.
 
 The core FHE logic of Velucrum — all 10 operations — requires no changes for this migration. Only the token interface layer is updated.
 
