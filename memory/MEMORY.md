@@ -1,3 +1,0 @@
-- [Confidential Counter project state](project_confidential_counter.md) — Sepolia address, frontend location, FHEVM SDK wiring details
-- [Always await getFhevmInstance](feedback_fhevm_createinstance_await.md) — createInstance is async; forgetting await gives a Promise, not the FHE instance
-- [userDecrypt SDK 0.4.2 fixes](feedback_userDecrypt_sdk042.md) — createEIP712 has no userAddress param, addresses must be checksummed, handles must be padded to 64 hex chars
